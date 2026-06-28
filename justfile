@@ -24,10 +24,18 @@ analyze:
 format:
     dart format lib
 
-run platform="linux": fetch-host
+_fetch-for platform:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    case "{{ platform }}" in
+      linux|macos|windows|web|chrome) just fetch-host ;;
+      *) just fetch-android ;;
+    esac
+
+run platform="linux": (_fetch-for platform)
     flutter run -d {{ platform }}
 
-profile platform="linux": fetch-host
+profile platform="linux": (_fetch-for platform)
     flutter run --profile -d {{ platform }}
 
 clean:

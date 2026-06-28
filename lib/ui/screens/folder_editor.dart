@@ -1,9 +1,12 @@
+import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:declar_ui/declar_ui.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m3e_core/m3e_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../api/syncthing_models.dart';
 import '../../i18n/strings.g.dart';
@@ -16,30 +19,49 @@ Future<void> showFolderEditor(
   BuildContext context,
   WidgetRef ref, {
   FolderConfig? existing,
+  String? presetFolderId,
+  String? presetLabel,
+  String? shareWithDevice,
 }) {
   return showAdaptiveModal(
     context,
-    builder: (context) => _FolderEditor(existing: existing),
+    builder: (context) => _FolderEditor(
+      existing: existing,
+      presetFolderId: presetFolderId,
+      presetLabel: presetLabel,
+      shareWithDevice: shareWithDevice,
+    ),
   );
 }
 
 const _types = ['sendreceive', 'sendonly', 'receiveonly'];
 
 class _FolderEditor extends ConsumerStatefulWidget {
-  const _FolderEditor({this.existing});
+  const _FolderEditor({
+    this.existing,
+    this.presetFolderId,
+    this.presetLabel,
+    this.shareWithDevice,
+  });
 
   final FolderConfig? existing;
+  final String? presetFolderId;
+  final String? presetLabel;
+  final String? shareWithDevice;
 
   @override
   ConsumerState<_FolderEditor> createState() => _FolderEditorState();
 }
 
 class _FolderEditorState extends ConsumerState<_FolderEditor> {
-  late final _label = TextEditingController(text: widget.existing?.label ?? '');
+  late final _label = TextEditingController(
+    text: widget.existing?.label ?? widget.presetLabel ?? '',
+  );
   late String _path = widget.existing?.path ?? '';
   late int _typeIndex = _types.indexOf(widget.existing?.type ?? 'sendreceive');
   late final Set<String> _shared = {
     ...?widget.existing?.devices.map((d) => d.deviceId),
+    ?widget.shareWithDevice,
   };
 
   @override
@@ -51,6 +73,11 @@ class _FolderEditorState extends ConsumerState<_FolderEditor> {
   bool get _isNew => widget.existing == null;
 
   Future<void> _pickPath() async {
+    if (!kIsWeb &&
+        Platform.isAndroid &&
+        !await Permission.manageExternalStorage.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
     final picked = await FilePicker.platform.getDirectoryPath();
     if (picked != null) setState(() => _path = picked);
   }
@@ -74,7 +101,7 @@ class _FolderEditorState extends ConsumerState<_FolderEditor> {
   }
 
   FolderConfig _blank() => FolderConfig(
-    id: _randomFolderId(),
+    id: widget.presetFolderId ?? _randomFolderId(),
     label: '',
     path: _path,
     type: 'sendreceive',

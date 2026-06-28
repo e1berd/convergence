@@ -158,7 +158,7 @@ ThemeData buildStThemeData(ColorScheme scheme) {
       elevation: 0,
       height: 76,
       labelTextStyle: WidgetStatePropertyAll(
-        base.textTheme.labelMedium?.copyWith(fontWeight: .w700),
+        base.textTheme.labelMedium?.copyWith(fontWeight: .w700, fontSize: 11),
       ),
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {

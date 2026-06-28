@@ -9,7 +9,7 @@ Future<T?> showAdaptiveModal<T>(
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
-      builder: builder,
+      builder: (context) => SingleChildScrollView(child: builder(context)),
     );
   }
   return showDialog<T>(

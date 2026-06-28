@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/syncthing_models.dart';
+import 'devices_providers.dart';
 import 'engine_providers.dart';
 
 final foldersProvider = FutureProvider<List<FolderConfig>>((ref) async {
@@ -30,11 +31,17 @@ class FoldersController {
   Future<void> save(FolderConfig folder) async {
     await _ref.read(clientProvider)?.putFolder(folder);
     _ref.invalidate(foldersProvider);
+    _ref.invalidate(pendingFoldersProvider);
   }
 
   Future<void> remove(String id) async {
     await _ref.read(clientProvider)?.deleteFolder(id);
     _ref.invalidate(foldersProvider);
+  }
+
+  Future<void> dismissPending(String folderId, String deviceId) async {
+    await _ref.read(clientProvider)?.dismissPendingFolder(folderId, deviceId);
+    _ref.invalidate(pendingFoldersProvider);
   }
 
   Future<void> scan(String id) async {

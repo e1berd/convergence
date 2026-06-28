@@ -2,6 +2,7 @@ import 'package:declar_ui/declar_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m3e_core/m3e_core.dart';
 
+import '../../api/syncthing_models.dart';
 import '../../i18n/strings.g.dart';
 import '../../state/devices_providers.dart';
 import '../../state/engine_providers.dart';
@@ -20,6 +21,7 @@ class FoldersScreen extends ConsumerWidget {
     final endpoint = ref.watch(endpointProvider);
     final folders = ref.watch(foldersProvider).value ?? const [];
     final pending = ref.watch(pendingFoldersProvider).value ?? const [];
+    final folderById = {for (final f in folders) f.id: f};
 
     if (endpoint == null) {
       return EmptyState(
@@ -50,7 +52,13 @@ class FoldersScreen extends ConsumerWidget {
                 crossAxisAlignment: .stretch,
                 spacing: 14,
                 children: [
-                  for (final p in pending) _PendingFolderBanner(label: p.label),
+                  for (final p in pending)
+                    _PendingFolderBanner(
+                      folderId: p.folderId,
+                      label: p.label,
+                      offeredBy: p.offeredBy,
+                      existing: folderById[p.folderId],
+                    ),
                   for (final folder in folders)
                     FolderCard(
                       folder: folder,
@@ -73,9 +81,38 @@ class FoldersScreen extends ConsumerWidget {
 }
 
 class _PendingFolderBanner extends ConsumerWidget {
-  const _PendingFolderBanner({required this.label});
+  const _PendingFolderBanner({
+    required this.folderId,
+    required this.label,
+    required this.offeredBy,
+    this.existing,
+  });
 
+  final String folderId;
   final String label;
+  final String offeredBy;
+  final FolderConfig? existing;
+
+  Future<void> _accept(BuildContext context, WidgetRef ref) async {
+    final folder = existing;
+    if (folder == null) {
+      showFolderEditor(
+        context,
+        ref,
+        presetFolderId: folderId,
+        presetLabel: label,
+        shareWithDevice: offeredBy,
+      );
+      return;
+    }
+    final devices = {
+      ...folder.devices.map((d) => d.deviceId),
+      offeredBy,
+    }.map((id) => FolderDeviceRef(deviceId: id)).toList();
+    await ref
+        .read(foldersControllerProvider)
+        .save(folder.copyWith(devices: devices));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,14 +134,20 @@ class _PendingFolderBanner extends ConsumerWidget {
                 Text(
                   t.pendingFolderTitle,
                 ).size(13).weight(.w800).color(colors.onTertiaryContainer),
-                Text(label, maxLines: 1)
+                Text(label.isEmpty ? folderId : label, maxLines: 1)
                     .size(12)
                     .color(colors.onTertiaryContainer.withValues(alpha: .85)),
               ],
             ),
           ),
+          IconButton(
+            onPressed: () => ref
+                .read(foldersControllerProvider)
+                .dismissPending(folderId, offeredBy),
+            icon: Icon(Icons.close_rounded, color: colors.onTertiaryContainer),
+          ),
           FilledButton(
-            onPressed: () => showFolderEditor(context, ref),
+            onPressed: () => _accept(context, ref),
             child: Text(t.accept),
           ),
         ],

@@ -114,6 +114,12 @@ devices:
   scanFromImage: Считать QR из изображения
   qrNotFound: QR-код не найден на изображении
   showQr: Показать мой QR
+  pairTitle: Сопряжение устройства
+  myQrTab: Мой QR
+  scanTab: Сканировать
+  myQrHint: Отсканируйте этот код с другого устройства, чтобы добавить его.
+  pointCamera: Наведите камеру на QR-код устройства
+  cameraUnsupported: Живая камера недоступна на этой платформе
   introducer: Представитель
   autoAccept: Автоприём папок
   remove: Удалить устройство

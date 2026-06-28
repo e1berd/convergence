@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../api/syncthing_models.dart';
 import '../../core/format.dart';
 import '../../i18n/strings.g.dart';
+import '../../platform/open_path.dart';
 import '../../state/folders_providers.dart';
 import 'expressive.dart';
 import 'expressive_menu.dart';
@@ -108,12 +109,24 @@ class _FolderMenu extends ConsumerWidget {
   final FolderConfig folder;
   final VoidCallback onEdit;
 
+  Future<void> _open(BuildContext context) async {
+    if (await openFolderInManager(folder.path)) return;
+    if (context.mounted) {
+      context.showSnackBar('${context.t.folders.open}: ${folder.path}');
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.t;
     final controller = ref.read(foldersControllerProvider);
     return ExpressiveMenuButton(
       items: [
+        ExpressiveMenuItem(
+          icon: Icons.folder_open_rounded,
+          label: t.folders.open,
+          onTap: () => _open(context),
+        ),
         ExpressiveMenuItem(
           icon: Icons.edit_rounded,
           label: t.common.edit,

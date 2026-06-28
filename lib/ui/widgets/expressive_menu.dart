@@ -31,12 +31,14 @@ class ExpressiveMenuButton extends StatefulWidget {
 }
 
 class _ExpressiveMenuButtonState extends State<ExpressiveMenuButton>
-    with SingleTickerProviderStateMixin {
-  final _link = LayerLink();
+    with TickerProviderStateMixin {
+  final _buttonKey = GlobalKey();
   final _portal = OverlayPortalController();
   late final SingleMotionController _open;
   late final SingleMotionController _close;
   bool _closing = false;
+
+  static const _menuWidth = 280.0;
 
   @override
   void initState() {
@@ -97,14 +99,33 @@ class _ExpressiveMenuButtonState extends State<ExpressiveMenuButton>
     return OverlayPortal(
       controller: _portal,
       overlayChildBuilder: _buildOverlay,
-      child: CompositedTransformTarget(
-        link: _link,
-        child: IconButton(icon: Icon(widget.icon), onPressed: _toggle),
+      child: IconButton(
+        key: _buttonKey,
+        icon: Icon(widget.icon),
+        onPressed: _toggle,
       ),
     );
   }
 
   Widget _buildOverlay(BuildContext context) {
+    final box = _buttonKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null) return const SizedBox.shrink();
+    final rect = box.localToGlobal(Offset.zero) & box.size;
+    final media = MediaQuery.of(context);
+    final screen = media.size;
+    final menuHeight = widget.items.length * 48.0 + 16;
+    final spaceBelow = screen.height - rect.bottom;
+    final openUp = spaceBelow < menuHeight + 16 && rect.top > spaceBelow;
+
+    final top = (openUp ? rect.top - menuHeight - 6 : rect.bottom + 6).clamp(
+      media.padding.top + 8,
+      screen.height - menuHeight - 8,
+    );
+    final left = (rect.right - _menuWidth).clamp(
+      8.0,
+      screen.width - _menuWidth - 8,
+    );
+
     return Stack(
       children: [
         Positioned.fill(
@@ -113,35 +134,32 @@ class _ExpressiveMenuButtonState extends State<ExpressiveMenuButton>
             onTap: _dismiss,
           ),
         ),
-        CompositedTransformFollower(
-          link: _link,
-          showWhenUnlinked: false,
-          targetAnchor: Alignment.bottomRight,
-          followerAnchor: Alignment.topRight,
-          offset: const Offset(0, 6),
-          child: Align(
-            alignment: Alignment.topRight,
-            child: AnimatedBuilder(
-              animation: Listenable.merge([_open, _close]),
-              builder: (context, child) {
-                final appear = _open.value.clamp(0.0, 1.2);
-                final hide = _close.value.clamp(0.0, 1.0);
-                final scale = (0.82 + 0.18 * appear) * (1 - 0.06 * hide);
-                final opacity = (appear.clamp(0.0, 1.0)) * (1 - hide);
-                return Opacity(
-                  opacity: opacity.clamp(0.0, 1.0),
+        Positioned(
+          left: left,
+          top: top,
+          width: _menuWidth,
+          child: AnimatedBuilder(
+            animation: Listenable.merge([_open, _close]),
+            builder: (context, child) {
+              final appear = _open.value.clamp(0.0, 1.2);
+              final hide = _close.value.clamp(0.0, 1.0);
+              final scale = (0.85 + 0.15 * appear) * (1 - 0.05 * hide);
+              final opacity = appear.clamp(0.0, 1.0) * (1 - hide);
+              return Opacity(
+                opacity: opacity.clamp(0.0, 1.0),
+                child: Transform.translate(
+                  offset: Offset(0, (1 - appear) * (openUp ? 8 : -8)),
                   child: Transform.scale(
                     scale: scale,
-                    alignment: Alignment.topRight,
-                    child: Transform.translate(
-                      offset: Offset(0, (1 - appear) * -8 + hide * -6),
-                      child: child,
-                    ),
+                    alignment: openUp
+                        ? Alignment.bottomRight
+                        : Alignment.topRight,
+                    child: child,
                   ),
-                );
-              },
-              child: _MenuCard(items: widget.items, onSelect: _select),
-            ),
+                ),
+              );
+            },
+            child: _MenuCard(items: widget.items, onSelect: _select),
           ),
         ),
       ],
@@ -165,18 +183,15 @@ class _MenuCard extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       borderRadius: BorderRadius.circular(24),
       clipBehavior: Clip.antiAlias,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: 200, maxWidth: 280),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (final item in items)
-                _MenuRow(item: item, onTap: () => onSelect(item)),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final item in items)
+              _MenuRow(item: item, onTap: () => onSelect(item)),
+          ],
         ),
       ),
     );
@@ -206,6 +221,9 @@ class _MenuRow extends StatelessWidget {
             Expanded(
               child: Text(
                 item.label,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                   color: fg,

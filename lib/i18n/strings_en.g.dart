@@ -424,6 +424,24 @@ class Translations$devices$en {
 	/// en: 'Show my QR'
 	String get showQr => 'Show my QR';
 
+	/// en: 'Pair device'
+	String get pairTitle => 'Pair device';
+
+	/// en: 'My QR'
+	String get myQrTab => 'My QR';
+
+	/// en: 'Scan'
+	String get scanTab => 'Scan';
+
+	/// en: 'Scan this code from another device to add it.'
+	String get myQrHint => 'Scan this code from another device to add it.';
+
+	/// en: 'Point the camera at a device QR code'
+	String get pointCamera => 'Point the camera at a device QR code';
+
+	/// en: 'Live camera is not available on this platform'
+	String get cameraUnsupported => 'Live camera is not available on this platform';
+
 	/// en: 'Introducer'
 	String get introducer => 'Introducer';
 
@@ -713,6 +731,12 @@ extension on Translations {
 			'devices.scanFromImage' => 'Scan QR from image',
 			'devices.qrNotFound' => 'No QR code found in the image',
 			'devices.showQr' => 'Show my QR',
+			'devices.pairTitle' => 'Pair device',
+			'devices.myQrTab' => 'My QR',
+			'devices.scanTab' => 'Scan',
+			'devices.myQrHint' => 'Scan this code from another device to add it.',
+			'devices.pointCamera' => 'Point the camera at a device QR code',
+			'devices.cameraUnsupported' => 'Live camera is not available on this platform',
 			'devices.introducer' => 'Introducer',
 			'devices.autoAccept' => 'Auto accept folders',
 			'devices.remove' => 'Remove device',

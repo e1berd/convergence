@@ -114,17 +114,20 @@ class _HomeShellState extends State<HomeShell> {
         )
         .body(pages)
         .bottomNavigation(
-          NavigationBar(
-            selectedIndex: _index,
-            onDestinationSelected: _select,
-            destinations: [
-              for (final d in destinations)
-                NavigationDestination(
-                  icon: Icon(d.icon),
-                  selectedIcon: Icon(d.selectedIcon),
-                  label: d.label,
-                ),
-            ],
+          MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.0,
+            child: NavigationBar(
+              selectedIndex: _index,
+              onDestinationSelected: _select,
+              destinations: [
+                for (final d in destinations)
+                  NavigationDestination(
+                    icon: Icon(d.icon),
+                    selectedIcon: Icon(d.selectedIcon),
+                    label: d.label,
+                  ),
+              ],
+            ),
           ),
         );
   }

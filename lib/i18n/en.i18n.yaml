@@ -114,6 +114,12 @@ devices:
   scanFromImage: Scan QR from image
   qrNotFound: No QR code found in the image
   showQr: Show my QR
+  pairTitle: Pair device
+  myQrTab: My QR
+  scanTab: Scan
+  myQrHint: Scan this code from another device to add it.
+  pointCamera: Point the camera at a device QR code
+  cameraUnsupported: Live camera is not available on this platform
   introducer: Introducer
   autoAccept: Auto accept folders
   remove: Remove device

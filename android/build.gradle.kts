@@ -14,6 +14,15 @@ rootProject.layout.buildDirectory.value(newBuildDir)
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
+    afterEvaluate {
+        extensions.findByName("android")?.let { android ->
+            runCatching {
+                android.javaClass
+                    .getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
+                    .invoke(android, 36)
+            }
+        }
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")

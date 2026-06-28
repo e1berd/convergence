@@ -1,18 +1,13 @@
-import 'dart:io' show Platform;
-
 import 'package:declar_ui/declar_ui.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:m3e_core/m3e_core.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../api/syncthing_models.dart';
-import '../../core/qr_decode.dart';
 import '../../i18n/strings.g.dart';
 import '../../state/devices_providers.dart';
 import '../widgets/adaptive_modal.dart';
 import '../widgets/text_field.dart';
+import 'qr_pair_screen.dart';
 
 Future<void> showDeviceEditor(
   BuildContext context,
@@ -46,7 +41,6 @@ class _DeviceEditorState extends ConsumerState<_DeviceEditor> {
   late bool _autoAccept = widget.existing?.autoAcceptFolders ?? false;
 
   bool get _isNew => widget.existing == null;
-  bool get _useCamera => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   @override
   void dispose() {
@@ -56,24 +50,8 @@ class _DeviceEditorState extends ConsumerState<_DeviceEditor> {
   }
 
   Future<void> _scan() async {
-    if (_useCamera) {
-      final code = await Navigator.push<String>(
-        context,
-        MaterialPageRoute(builder: (_) => const _ScannerPage()),
-      );
-      if (code != null && mounted) setState(() => _id.text = code.trim());
-      return;
-    }
-    final picked = await FilePicker.platform.pickFiles(type: FileType.image);
-    final path = picked?.files.singleOrNull?.path;
-    if (path == null) return;
-    final code = await decodeQrFromImage(path);
-    if (!mounted) return;
-    if (code != null) {
-      setState(() => _id.text = code.trim());
-    } else {
-      context.showSnackBar(context.t.devices.qrNotFound);
-    }
+    final code = await showQrPairScreen(context, startOnScan: true);
+    if (code != null && mounted) setState(() => _id.text = code);
   }
 
   Future<void> _save() async {
@@ -121,12 +99,8 @@ class _DeviceEditorState extends ConsumerState<_DeviceEditor> {
             alignment: Alignment.centerLeft,
             child: M3EButton.icon(
               onPressed: _scan,
-              icon: Icon(
-                _useCamera
-                    ? Icons.qr_code_scanner_rounded
-                    : Icons.image_search_rounded,
-              ),
-              label: Text(_useCamera ? t.scan : t.scanFromImage),
+              icon: const Icon(Icons.qr_code_scanner_rounded),
+              label: Text(t.scan),
               style: .tonal,
               size: .sm,
             ),
@@ -147,23 +121,5 @@ class _DeviceEditorState extends ConsumerState<_DeviceEditor> {
         ],
       ),
     );
-  }
-}
-
-class _ScannerPage extends StatelessWidget {
-  const _ScannerPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold()
-        .appBar(AppBar(title: Text(context.t.devices.scan)))
-        .body(
-          MobileScanner(
-            onDetect: (capture) {
-              final value = capture.barcodes.firstOrNull?.rawValue;
-              if (value != null) Navigator.pop(context, value);
-            },
-          ),
-        );
   }
 }

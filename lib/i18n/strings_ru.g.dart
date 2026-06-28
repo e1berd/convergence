@@ -219,6 +219,12 @@ class _Translations$devices$ru implements Translations$devices$en {
 	@override String get scanFromImage => 'Считать QR из изображения';
 	@override String get qrNotFound => 'QR-код не найден на изображении';
 	@override String get showQr => 'Показать мой QR';
+	@override String get pairTitle => 'Сопряжение устройства';
+	@override String get myQrTab => 'Мой QR';
+	@override String get scanTab => 'Сканировать';
+	@override String get myQrHint => 'Отсканируйте этот код с другого устройства, чтобы добавить его.';
+	@override String get pointCamera => 'Наведите камеру на QR-код устройства';
+	@override String get cameraUnsupported => 'Живая камера недоступна на этой платформе';
 	@override String get introducer => 'Представитель';
 	@override String get autoAccept => 'Автоприём папок';
 	@override String get remove => 'Удалить устройство';
@@ -401,6 +407,12 @@ extension on TranslationsRu {
 			'devices.scanFromImage' => 'Считать QR из изображения',
 			'devices.qrNotFound' => 'QR-код не найден на изображении',
 			'devices.showQr' => 'Показать мой QR',
+			'devices.pairTitle' => 'Сопряжение устройства',
+			'devices.myQrTab' => 'Мой QR',
+			'devices.scanTab' => 'Сканировать',
+			'devices.myQrHint' => 'Отсканируйте этот код с другого устройства, чтобы добавить его.',
+			'devices.pointCamera' => 'Наведите камеру на QR-код устройства',
+			'devices.cameraUnsupported' => 'Живая камера недоступна на этой платформе',
 			'devices.introducer' => 'Представитель',
 			'devices.autoAccept' => 'Автоприём папок',
 			'devices.remove' => 'Удалить устройство',
