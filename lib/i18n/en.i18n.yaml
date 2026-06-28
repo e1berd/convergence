@@ -1,0 +1,174 @@
+version: 1.0.0
+
+app:
+  name: Syncthing
+
+nav:
+  status: Status
+  folders: Folders
+  devices: Devices
+  activity: Activity
+  settings: Settings
+
+navShort:
+  status: Status
+  folders: Folders
+  devices: Devices
+  activity: Activity
+  settings: Settings
+
+common:
+  add: Add
+  cancel: Cancel
+  save: Save
+  remove: Remove
+  close: Close
+  retry: Retry
+  edit: Edit
+  pause: Pause
+  resume: Resume
+  online: Online
+  offline: Offline
+  unknown: Unknown
+  copied: Copied to clipboard
+  perSecond: '{value}/s'
+
+engine:
+  starting: Starting engine
+  running: Engine running
+  stopped: Engine stopped
+  error: Engine error
+  remote: Remote engine
+  restart: Restart
+  shutdown: Shut down
+  restarting: Restarting engine
+  connectFailed: Could not reach Syncthing
+  bundledTitle: Bundled engine
+  bundledSubtitle: Run and manage Syncthing inside this app
+  remoteTitle: Remote engine
+  remoteSubtitle: Connect to an existing Syncthing instance
+  remoteUrl: Server URL
+  remoteApiKey: API key
+  apply: Apply
+
+status:
+  overview: Overview
+  state: State
+  uptime: Uptime
+  download: Download
+  upload: Upload
+  totalFiles: Files
+  totalFolders: Folders
+  totalDevices: Devices
+  thisDevice: This device
+  deviceId: Device ID
+  version: Version
+  listeners: Listeners
+  discovery: Discovery
+  idle: Up to date
+  syncing: Syncing
+  scanning: Scanning
+  paused: Paused
+  disconnected: Disconnected
+  connected: '{n} connected'
+  empty: Engine is not ready yet
+
+folders:
+  title: Folders
+  add: Add folder
+  empty: No folders yet
+  emptyHint: Add a folder to start syncing it across your devices.
+  label: Label
+  folderId: Folder ID
+  path: Folder path
+  choosePath: Choose path
+  type: Folder type
+  typeSendReceive: Send & Receive
+  typeSendOnly: Send only
+  typeReceiveOnly: Receive only
+  sharedWith: Shared with
+  rescan: Rescan
+  rescanIntervalLabel: Rescan
+  scanNow: Scan now
+  globalState: Global
+  localState: Local
+  needItems: '{n} items to sync'
+  state: State
+  remove: Remove folder
+  removeConfirm: Remove this folder from Syncthing? Files on disk are kept.
+  open: Open folder
+  openFailed: Could not open folder
+  added: Folder added
+  noDevices: Pair a device first to share folders.
+
+devices:
+  title: Devices
+  add: Add device
+  empty: No remote devices
+  emptyHint: Add a device by its ID or scan its QR code.
+  thisDevice: This device
+  name: Device name
+  id: Device ID
+  idHint: Paste a device ID or scan a QR code
+  scan: Scan QR
+  scanFromImage: Scan QR from image
+  qrNotFound: No QR code found in the image
+  showQr: Show my QR
+  introducer: Introducer
+  autoAccept: Auto accept folders
+  remove: Remove device
+  removeConfirm: Remove this device?
+  added: Device added
+  lastSeen: Last seen {when}
+  download: In
+  upload: Out
+  address: Address
+  pendingTitle: Wants to connect
+  pendingFolderTitle: New folder offered
+  accept: Accept
+  dismiss: Dismiss
+
+activity:
+  title: Activity
+  empty: No activity yet
+  clear: Clear
+  events: Events
+  log: Engine log
+  copyLog: Copy log
+
+settings:
+  title: Settings
+  appearance: Appearance
+  themeSystem: System
+  themeLight: Light
+  themeDark: Dark
+  palette: Color scheme
+  languageTitle: Language
+  languageSubtitle: Choose the interface language
+  languageEnglish: English
+  languageRussian: Russian
+  engine: Syncthing engine
+  network: Network
+  natTitle: NAT traversal
+  natSubtitle: Allow Syncthing to map external ports
+  globalDiscoveryTitle: Global discovery
+  globalDiscoverySubtitle: Find devices via the global discovery servers
+  localDiscoveryTitle: Local discovery
+  localDiscoverySubtitle: Find devices on the local network
+  relaysTitle: Relays
+  relaysSubtitle: Connect through relay servers when direct fails
+  limitsTitle: Rate limits
+  downLimit: Download limit (KiB/s)
+  upLimit: Upload limit (KiB/s)
+  security: Security
+  guiAuthTitle: GUI authentication
+  guiAuthSubtitle: Set a username and password to protect the Syncthing GUI on this machine.
+  guiUser: Username
+  guiPassword: Password
+  guiPasswordHint: Leave blank to keep the current password
+  guiAuthConfigured: Authentication is configured
+  guiAuthNotConfigured: No authentication set
+  guiAuthSaved: GUI authentication updated
+  guiClear: Disable
+  about: About
+  aboutSubtitle: Engine and app information

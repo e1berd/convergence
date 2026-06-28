@@ -1,0 +1,174 @@
+version: 1.0.0
+
+app:
+  name: Syncthing
+
+nav:
+  status: Статус
+  folders: Папки
+  devices: Устройства
+  activity: Активность
+  settings: Настройки
+
+navShort:
+  status: Статус
+  folders: Папки
+  devices: Устройства
+  activity: Активность
+  settings: Настройки
+
+common:
+  add: Добавить
+  cancel: Отмена
+  save: Сохранить
+  remove: Удалить
+  close: Закрыть
+  retry: Повторить
+  edit: Изменить
+  pause: Пауза
+  resume: Возобновить
+  online: В сети
+  offline: Не в сети
+  unknown: Неизвестно
+  copied: Скопировано
+  perSecond: '{value}/с'
+
+engine:
+  starting: Запуск движка
+  running: Движок работает
+  stopped: Движок остановлен
+  error: Ошибка движка
+  remote: Удалённый движок
+  restart: Перезапустить
+  shutdown: Выключить
+  restarting: Перезапуск движка
+  connectFailed: Нет связи с Syncthing
+  bundledTitle: Встроенный движок
+  bundledSubtitle: Запускать и управлять Syncthing внутри приложения
+  remoteTitle: Удалённый движок
+  remoteSubtitle: Подключиться к существующему Syncthing
+  remoteUrl: Адрес сервера
+  remoteApiKey: API-ключ
+  apply: Применить
+
+status:
+  overview: Обзор
+  state: Состояние
+  uptime: Аптайм
+  download: Загрузка
+  upload: Отдача
+  totalFiles: Файлы
+  totalFolders: Папки
+  totalDevices: Устройства
+  thisDevice: Это устройство
+  deviceId: ID устройства
+  version: Версия
+  listeners: Слушатели
+  discovery: Обнаружение
+  idle: Синхронизировано
+  syncing: Синхронизация
+  scanning: Сканирование
+  paused: Пауза
+  disconnected: Отключено
+  connected: 'Подключено: {n}'
+  empty: Движок ещё не готов
+
+folders:
+  title: Папки
+  add: Добавить папку
+  empty: Папок пока нет
+  emptyHint: Добавьте папку, чтобы синхронизировать её между устройствами.
+  label: Название
+  folderId: ID папки
+  path: Путь к папке
+  choosePath: Выбрать путь
+  type: Тип папки
+  typeSendReceive: Приём и отправка
+  typeSendOnly: Только отправка
+  typeReceiveOnly: Только приём
+  sharedWith: Доступ устройствам
+  rescan: Пересканировать
+  rescanIntervalLabel: Пересканирование
+  scanNow: Сканировать
+  globalState: Глобально
+  localState: Локально
+  needItems: 'К синхронизации: {n}'
+  state: Состояние
+  remove: Удалить папку
+  removeConfirm: Удалить эту папку из Syncthing? Файлы на диске останутся.
+  open: Открыть папку
+  openFailed: Не удалось открыть папку
+  added: Папка добавлена
+  noDevices: Сначала добавьте устройство, чтобы делиться папками.
+
+devices:
+  title: Устройства
+  add: Добавить устройство
+  empty: Нет удалённых устройств
+  emptyHint: Добавьте устройство по ID или отсканируйте QR-код.
+  thisDevice: Это устройство
+  name: Имя устройства
+  id: ID устройства
+  idHint: Вставьте ID устройства или отсканируйте QR
+  scan: Сканировать QR
+  scanFromImage: Считать QR из изображения
+  qrNotFound: QR-код не найден на изображении
+  showQr: Показать мой QR
+  introducer: Представитель
+  autoAccept: Автоприём папок
+  remove: Удалить устройство
+  removeConfirm: Удалить это устройство?
+  added: Устройство добавлено
+  lastSeen: Был(а) {when}
+  download: Вход
+  upload: Выход
+  address: Адрес
+  pendingTitle: Хочет подключиться
+  pendingFolderTitle: Предложена папка
+  accept: Принять
+  dismiss: Отклонить
+
+activity:
+  title: Активность
+  empty: Активности пока нет
+  clear: Очистить
+  events: События
+  log: Лог движка
+  copyLog: Скопировать лог
+
+settings:
+  title: Настройки
+  appearance: Внешний вид
+  themeSystem: Системная
+  themeLight: Светлая
+  themeDark: Тёмная
+  palette: Цветовая схема
+  languageTitle: Язык
+  languageSubtitle: Выберите язык интерфейса
+  languageEnglish: Английский
+  languageRussian: Русский
+  engine: Движок Syncthing
+  network: Сеть
+  natTitle: Обход NAT
+  natSubtitle: Разрешить Syncthing пробрасывать порты
+  globalDiscoveryTitle: Глобальное обнаружение
+  globalDiscoverySubtitle: Искать устройства через серверы обнаружения
+  localDiscoveryTitle: Локальное обнаружение
+  localDiscoverySubtitle: Искать устройства в локальной сети
+  relaysTitle: Реле
+  relaysSubtitle: Соединяться через реле, если прямое не удалось
+  limitsTitle: Ограничения скорости
+  downLimit: Лимит загрузки (КиБ/с)
+  upLimit: Лимит отдачи (КиБ/с)
+  security: Безопасность
+  guiAuthTitle: Аутентификация GUI
+  guiAuthSubtitle: Задайте логин и пароль, чтобы защитить GUI Syncthing на этом компьютере.
+  guiUser: Имя пользователя
+  guiPassword: Пароль
+  guiPasswordHint: Оставьте пустым, чтобы не менять пароль
+  guiAuthConfigured: Аутентификация настроена
+  guiAuthNotConfigured: Аутентификация не настроена
+  guiAuthSaved: Аутентификация GUI обновлена
+  guiClear: Отключить
+  about: О приложении
+  aboutSubtitle: Информация о движке и приложении

@@ -1,0 +1,8 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - lib/i18n/strings*.g.dart
+
+linter:
+  rules:

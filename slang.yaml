@@ -1,0 +1,13 @@
+input_directory: lib/i18n
+input_file_pattern: .i18n.yaml
+output_directory: lib/i18n
+output_file_name: strings.g.dart
+base_locale: en
+fallback_strategy: base
+translate_var: t
+enum_name: AppLocale
+namespaces: false
+string_interpolation: braces
+
+flutter:
+  localize: true

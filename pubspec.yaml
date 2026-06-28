@@ -1,0 +1,66 @@
+name: syncthing_client
+description: "A Material 3 Expressive Syncthing client with a bundled Syncthing engine."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  m3e_core: ^0.1.0
+  declar_ui: ^2.0.6
+  flutter_riverpod: ^3.3.2
+  motor: ^1.1.0
+  animations: ^2.1.2
+
+  slang: ^4.0.0
+  slang_flutter: ^4.0.0
+
+  http: ^1.2.2
+  shared_preferences: ^2.2.2
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  file_picker: ^10.3.7
+  url_launcher: ^6.3.1
+
+  mobile_scanner: ^7.2.0
+  qr_flutter: ^4.1.0
+  zxing2: ^0.2.3
+  image: ^4.3.0
+
+  flutter_displaymode: ^0.6.0
+  permission_handler: ^11.3.1
+  flutter_background_service: ^5.1.0
+  nativeapi: ^0.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  slang_build_runner: ^4.0.0
+  build_runner: ^2.4.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/bin/
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 900
