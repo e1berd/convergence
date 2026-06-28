@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:m3e_core/m3e_core.dart';
 
 import 'expressive_motion.dart';
 
 export 'expressive_motion.dart';
+export 'package:m3e_core/m3e_core.dart' show Shapes;
 
 const expressiveDuration = Duration(milliseconds: 520);
 const expressiveFastDuration = Duration(milliseconds: 260);
@@ -70,6 +72,19 @@ class ExpressiveResponsiveCenter extends StatelessWidget {
   }
 }
 
+List<BoxShadow> expressiveShadow(ColorScheme colors, {double strength = 1}) => [
+  BoxShadow(
+    color: colors.shadow.withValues(alpha: .07 * strength),
+    blurRadius: 22 * strength,
+    offset: Offset(0, 8 * strength),
+  ),
+  BoxShadow(
+    color: colors.shadow.withValues(alpha: .04 * strength),
+    blurRadius: 3,
+    offset: const Offset(0, 1),
+  ),
+];
+
 class ExpressivePanel extends StatelessWidget {
   const ExpressivePanel({
     super.key,
@@ -77,12 +92,14 @@ class ExpressivePanel extends StatelessWidget {
     this.padding = const EdgeInsets.all(20),
     this.radius = 32,
     this.color,
+    this.elevated = true,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
   final Color? color;
+  final bool elevated;
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +111,9 @@ class ExpressivePanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: color ?? colors.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: colors.outlineVariant.withValues(alpha: .32)),
+        border: Border.all(color: colors.outlineVariant.withValues(alpha: .2)),
+        boxShadow: elevated ? expressiveShadow(colors) : null,
       ),
-      clipBehavior: Clip.antiAlias,
       child: child,
     );
   }
@@ -149,10 +166,10 @@ class ExpressiveSection extends StatelessWidget {
               color: colors.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(32),
               border: Border.all(
-                color: colors.outlineVariant.withValues(alpha: .32),
+                color: colors.outlineVariant.withValues(alpha: .2),
               ),
+              boxShadow: expressiveShadow(colors),
             ),
-            clipBehavior: Clip.antiAlias,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -174,7 +191,7 @@ class ExpressiveSection extends StatelessWidget {
   }
 }
 
-class ExpressiveIconContainer extends StatelessWidget {
+class ExpressiveIconContainer extends StatefulWidget {
   const ExpressiveIconContainer({
     super.key,
     required this.icon,
@@ -182,6 +199,8 @@ class ExpressiveIconContainer extends StatelessWidget {
     this.foregroundColor,
     this.size = 52,
     this.radius = 18,
+    this.shape,
+    this.spinning = false,
   });
 
   final IconData icon;
@@ -189,23 +208,84 @@ class ExpressiveIconContainer extends StatelessWidget {
   final Color? foregroundColor;
   final double size;
   final double radius;
+  final Shapes? shape;
+  final bool spinning;
+
+  @override
+  State<ExpressiveIconContainer> createState() =>
+      _ExpressiveIconContainerState();
+}
+
+class _ExpressiveIconContainerState extends State<ExpressiveIconContainer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _spin;
+
+  @override
+  void initState() {
+    super.initState();
+    _spin = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2800),
+    );
+    if (widget.spinning) _spin.repeat();
+  }
+
+  @override
+  void didUpdateWidget(ExpressiveIconContainer old) {
+    super.didUpdateWidget(old);
+    if (widget.spinning && !_spin.isAnimating) {
+      _spin.repeat();
+    } else if (!widget.spinning && _spin.isAnimating) {
+      _spin
+        ..stop()
+        ..value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _spin.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return AnimatedContainer(
-      duration: expressiveFastDuration,
-      curve: expressiveCurve,
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color ?? colors.primaryContainer,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      child: Icon(
-        icon,
-        color: foregroundColor ?? colors.onPrimaryContainer,
-        size: size * .48,
+    final bg = widget.color ?? colors.primaryContainer;
+    final fg = widget.foregroundColor ?? colors.onPrimaryContainer;
+    final shape = widget.shape;
+
+    Widget background = shape == null
+        ? AnimatedContainer(
+            duration: expressiveFastDuration,
+            curve: expressiveCurve,
+            width: widget.size,
+            height: widget.size,
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(widget.radius),
+            ),
+          )
+        : M3EContainer(
+            shape,
+            width: widget.size,
+            height: widget.size,
+            color: bg,
+            child: const SizedBox.expand(),
+          );
+    if (widget.spinning) {
+      background = RotationTransition(turns: _spin, child: background);
+    }
+
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          background,
+          Icon(widget.icon, color: fg, size: widget.size * .44),
+        ],
       ),
     );
   }

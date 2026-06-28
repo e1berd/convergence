@@ -34,7 +34,7 @@ class DeviceCard extends ConsumerWidget {
               ExpressiveIconContainer(
                 icon: online ? Icons.computer_rounded : Icons.cloud_off_rounded,
                 size: 48,
-                radius: 16,
+                shape: online ? Shapes.gem : Shapes.pentagon,
                 color: online
                     ? colors.tertiaryContainer
                     : colors.surfaceContainerHighest,

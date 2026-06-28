@@ -108,7 +108,7 @@ class _PairingCard extends ConsumerWidget {
               ExpressiveIconContainer(
                 icon: Icons.hub_rounded,
                 size: 44,
-                radius: 14,
+                shape: Shapes.gem,
                 color: colors.secondaryContainer,
                 foregroundColor: colors.onSecondaryContainer,
               ),

@@ -29,7 +29,7 @@ class EmptyState extends StatelessWidget {
               ExpressiveIconContainer(
                 icon: icon,
                 size: 96,
-                radius: 32,
+                shape: Shapes.flower,
                 color: colors.secondaryContainer,
                 foregroundColor: colors.onSecondaryContainer,
               ),

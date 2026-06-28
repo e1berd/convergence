@@ -23,6 +23,7 @@ class FolderCard extends ConsumerWidget {
     final controller = ref.read(foldersControllerProvider);
     final progress = status?.completion ?? 1.0;
     final paused = folder.paused;
+    final syncing = !paused && status?.state == 'syncing';
 
     return ExpressivePanel(
       padding: const EdgeInsets.all(18),
@@ -32,9 +33,14 @@ class FolderCard extends ConsumerWidget {
           Row(
             children: [
               ExpressiveIconContainer(
-                icon: paused ? Icons.pause_rounded : Icons.folder_rounded,
+                icon: paused
+                    ? Icons.pause_rounded
+                    : syncing
+                    ? Icons.sync_rounded
+                    : Icons.folder_rounded,
                 size: 48,
-                radius: 16,
+                shape: syncing ? Shapes.sunny : Shapes.clampShell,
+                spinning: syncing,
                 color: colors.secondaryContainer,
                 foregroundColor: colors.onSecondaryContainer,
               ),

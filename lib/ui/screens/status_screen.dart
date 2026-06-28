@@ -43,6 +43,7 @@ class StatusScreen extends ConsumerWidget {
         formatBytes(connections?.totals.inBytes ?? 0),
         colors.primaryContainer,
         colors.onPrimaryContainer,
+        Shapes.gem,
       ),
       _Metric(
         Icons.upload_rounded,
@@ -50,6 +51,7 @@ class StatusScreen extends ConsumerWidget {
         formatBytes(connections?.totals.outBytes ?? 0),
         colors.tertiaryContainer,
         colors.onTertiaryContainer,
+        Shapes.burst,
       ),
       _Metric(
         Icons.folder_rounded,
@@ -57,6 +59,7 @@ class StatusScreen extends ConsumerWidget {
         '${folders.length}',
         colors.secondaryContainer,
         colors.onSecondaryContainer,
+        Shapes.clampShell,
       ),
       _Metric(
         Icons.devices_rounded,
@@ -64,6 +67,7 @@ class StatusScreen extends ConsumerWidget {
         '$connected / ${devices.length}',
         colors.surfaceContainerHighest,
         colors.onSurface,
+        Shapes.pentagon,
       ),
     ];
 
@@ -96,12 +100,20 @@ class StatusScreen extends ConsumerWidget {
 }
 
 class _Metric {
-  const _Metric(this.icon, this.label, this.value, this.bg, this.fg);
+  const _Metric(
+    this.icon,
+    this.label,
+    this.value,
+    this.bg,
+    this.fg,
+    this.shape,
+  );
   final IconData icon;
   final String label;
   final String value;
   final Color bg;
   final Color fg;
+  final Shapes shape;
 }
 
 class _OverviewCard extends StatelessWidget {
@@ -120,7 +132,7 @@ class _OverviewCard extends StatelessWidget {
           ExpressiveIconContainer(
             icon: Icons.insights_rounded,
             size: 56,
-            radius: 20,
+            shape: Shapes.sunny,
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -148,25 +160,33 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return ExpressiveReveal(
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: metric.bg,
           borderRadius: BorderRadius.circular(28),
+          boxShadow: expressiveShadow(colors, strength: .7),
         ),
         child: Column(
           crossAxisAlignment: .start,
           mainAxisAlignment: .spaceBetween,
           children: [
-            Icon(metric.icon, color: metric.fg, size: 26),
+            ExpressiveIconContainer(
+              icon: metric.icon,
+              size: 40,
+              shape: metric.shape,
+              color: metric.fg.withValues(alpha: .18),
+              foregroundColor: metric.fg,
+            ),
             Column(
               crossAxisAlignment: .start,
               children: [
                 Text(
                   metric.value,
                   maxLines: 1,
-                ).size(22).weight(.w800).color(metric.fg),
+                ).size(26).weight(.w800).color(metric.fg),
                 Text(
                   metric.label,
                 ).size(12).weight(.w600).color(metric.fg.withValues(alpha: .8)),
